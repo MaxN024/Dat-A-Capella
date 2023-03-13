@@ -15,7 +15,7 @@ OOCSI oocsi = OOCSI();
 const int buzzPin = 33;          // the number of the buzzer pin
 int vibrationPin = 32;           // the number of the vibration sensor pin
 int pressurePin = 4;             // the number of the pressure pin 
-int pressurePinOther = 34;             // the number of the pressure pin 
+int pressurePinOther = 34;       // the number of the pressure pin 
 
 int pressureState = 0;
 int pressureStateOther = 0;
@@ -65,18 +65,17 @@ void loop() {
   oocsi.check();
 
 
-  //Contante loop versturen en ontvangen vibratie waardes
+  //Constante loop versturen en ontvangen vibratie waardes
   oocsi.addInt("vibration_device2", vibrationStateSend);
   oocsi.sendMessage();
      
-  vibrationStateReceive = oocsi.getInt("vibration_device1", 0);
+ // vibrationStateReceive = oocsi.getInt("vibration_device1", 0);
 
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateReceive);
   Serial.print("Sensor Value C9: ");
   Serial.println(vibrationStateSend);
 
-  // moeten wij processoocsi roepen of gaat dat vanzelf
 
   
   // offstate 
