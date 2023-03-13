@@ -105,8 +105,8 @@ void processOOCSI() {
    
    vibrationStateReceive = oocsi.getInt("vibration_device2", 0);
 
-   Serial.print("Sensor Value device 2: ");
-   Serial.println(vibrationStateReceive);
+//   Serial.print("Sensor Value device 2: ");
+//   Serial.println(vibrationStateReceive);
 
    
   // use this to print out the raw message that was received
