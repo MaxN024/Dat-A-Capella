@@ -85,13 +85,13 @@ void loop() {
   
   // onstate with vibration 
   else if (pressureState > 4000 && pressureStateOther < 4000 && vibrationStateSend > 1000){
-      tone(buzzPin, 500);
+      tone(buzzPin, 100);
   }
   else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateReceive > 1000){
-      tone(buzzPin, 500);
+      tone(buzzPin, 100);
   }
   else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateSend > 1000 && vibrationStateReceive > 1000){
-      tone(buzzPin, 1000);
+      tone(buzzPin, 300);
   } 
   else{
       noTone(buzzPin);
