@@ -96,7 +96,7 @@ void loop() {
   else{
       noTone(buzzPin);
   }
-  delay(100);
+  delay(1000);
 }
 
 // function which OOCSI calls when an OOCSI message is received
@@ -104,8 +104,8 @@ void processOOCSI() {
    
    vibrationStateReceive = oocsi.getInt("vibration_device1", 0);
 
-   Serial.print("Sensor Value device 1: ");
-   Serial.println(vibrationStateReceive);
+//   Serial.print("Sensor Value device 1: ");
+//   Serial.println(vibrationStateReceive);
 
    
   // use this to print out the raw message that was received
