@@ -57,7 +57,6 @@ void loop() {
 
   // create a new message
   oocsi.newMessage("pencilcaseCommunication1");
-  oocsi.check();
 
   //Constante loop versturen en ontvangen vibratie waardes
   oocsi.addInt("vibration_device1", vibrationStateSend);
@@ -89,6 +88,7 @@ void loop() {
       noTone(buzzPin);
   }
   delay(1000);
+  oocsi.check();
 }
 
 // function which OOCSI calls when an OOCSI message is received
