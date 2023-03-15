@@ -14,7 +14,7 @@ OOCSI oocsi = OOCSI();
 
 const int buzzPin = 33;          // the number of the buzzer pin
 int vibrationPin = 32;           // the number of the vibration sensor pin
-int pressurePin = 4;             // the number of the pressure pin 
+int pressurePin = 35;             // the number of the pressure pin 
 int pressurePinOther = 34;       // the number of the pressure pin 
 
 int pressureState = 0;
@@ -23,7 +23,7 @@ int pressureStateOther = 0;
 int vibrationStateReceive = 0;
 int vibrationStateSend = 0;
 
-int volume;
+//int volume;
 
 void setup() {
   Serial.begin(115200);
@@ -56,7 +56,7 @@ void loop() {
   
   pressureState = analogRead(pressurePin);
   pressureStateOther = analogRead(pressurePinOther);
-  vibrationStateSend = analogRead(vibrationPin);
+  vibrationStateSend = digitalRead(vibrationPin);
   
 
   // create a new message
@@ -75,29 +75,38 @@ void loop() {
   Serial.println(vibrationStateReceive);
   Serial.print("Sensor Value C9: ");
   Serial.println(vibrationStateSend);
-
-
+  
+  Serial.print("Sensor Value pressure: ");
+  Serial.println(pressureState);
+  Serial.print("Sensor Value pressure other: ");
+  Serial.println(pressureStateOther);
   
   // offstate 
-  if (pressureState < 4000 && pressureStateOther < 4000){ 
+  if (pressureState < 4000 && pressureStateOther < 4000){                                                          
       noTone(buzzPin);
   }
   
-  // onstate with vibration 
-  else if (pressureState > 4000 && pressureStateOther < 4000 && vibrationStateSend < 100){
-      tone(buzzPin, 100);
+  // onstate with vibration
+  else if (pressureState > 4000 && pressureStateOther > 4000 && vibrationStateSend == 1 && vibrationStateReceive == 1){   
+      tone(buzzPin, 1000);
+      delay(1000);
+  } 
+  else if (pressureState > 4000 /*&& pressureStateOther < 4000 */&& vibrationStateSend == 1){                    
+      tone(buzzPin, 500);
+      delay(1000);
+ 
   }
   
-  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateReceive < 100){
-      tone(buzzPin, 100);
+  else if (/*pressureState < 4000 &&*/ pressureStateOther > 4000 && vibrationStateReceive == 1){                      
+      tone(buzzPin, 500);
+      //led
+      delay(1000);
   }
-  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateSend < 100 && vibrationStateReceive < 100){
-      tone(buzzPin, 300);
-  } 
+
   else{
       noTone(buzzPin);
   }
-  delay(1000);
+  delay(500);
   oocsi.check();
 }
 
