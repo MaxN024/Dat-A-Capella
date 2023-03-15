@@ -17,6 +17,7 @@ const int buzzPin = 33;          // the number of the buzzer pin
 int vibrationPin = 32;           // the number of the vibration sensor pin
 int pressurePin = 35;             // the number of the pressure pin
 int pressurePinOther = 34;       // the number of the pressure pin
+int ledPin = 25;
 
 int pressureState = 0;
 int pressureStateOther = 0;
@@ -33,6 +34,7 @@ void setup() {
   pinMode(pressurePin, INPUT);
   pinMode(vibrationPin, INPUT);
   pinMode(pressurePinOther, INPUT);
+  pinMode(ledPin, OUTPUT);
 
   // setting up OOCSI. processOOCSI is the name of the fucntion to call when receiving messages, can be a random function name
   // connect wifi and OOCSI to the server
@@ -69,12 +71,12 @@ void loop() {
   Serial.println(vibrationStateReceive);
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateSend);
-  
+
   Serial.print("Sensor Value pressure: ");
   Serial.println(pressureState);
   Serial.print("Sensor Value pressure other: ");
   Serial.println(pressureStateOther);
-  
+
   // offstate
   if (pressureState < 4000 && pressureStateOther < 4000) {
     noTone(buzzPin);
@@ -98,6 +100,13 @@ void loop() {
   else {
     noTone(buzzPin);
   }
+
+  if (pressureStateOther > 4000) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+
   delay(500);
   oocsi.check();
 }
