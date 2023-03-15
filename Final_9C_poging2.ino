@@ -20,7 +20,6 @@ int pressurePinOther = 34;       // the number of the pressure pin
 int pressureState = 0;
 int pressureStateOther = 0;
 
-
 int vibrationStateReceive = 0;
 int vibrationStateSend = 0;
 
@@ -62,14 +61,15 @@ void loop() {
 
   // create a new message
   oocsi.newMessage("pencilcaseCommunication2");
-  oocsi.check();
-
 
   //Constante loop versturen en ontvangen vibratie waardes
   oocsi.addInt("vibration_device2", vibrationStateSend);
   oocsi.sendMessage();
-     
- // vibrationStateReceive = oocsi.getInt("vibration_device1", 0);
+
+  // prints out the raw message (how it is sent to the OOCSI server)
+  oocsi.printSendMessage();
+
+// vibrationStateReceive = oocsi.getInt("vibration_device1", 0);
 
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateReceive);
@@ -84,30 +84,28 @@ void loop() {
   }
   
   // onstate with vibration 
-  else if (pressureState > 4000 && pressureStateOther < 4000 && vibrationStateSend > 1000){
+  else if (pressureState > 4000 && pressureStateOther < 4000 && vibrationStateSend < 100){
       tone(buzzPin, 100);
   }
-  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateReceive > 1000){
+  
+  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateReceive < 100){
       tone(buzzPin, 100);
   }
-  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateSend > 1000 && vibrationStateReceive > 1000){
+  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateSend < 100 && vibrationStateReceive < 100){
       tone(buzzPin, 300);
   } 
   else{
       noTone(buzzPin);
   }
   delay(1000);
+  oocsi.check();
 }
 
 // function which OOCSI calls when an OOCSI message is received
 void processOOCSI() {
    
-   vibrationStateReceive = oocsi.getInt("vibration_device1", 0);
-
-//   Serial.print("Sensor Value device 1: ");
-//   Serial.println(vibrationStateReceive);
-
-   
+   vibrationStateReceive = oocsi.getInt("vibration_device1", 200);
+  
   // use this to print out the raw message that was received
-  // oocsi.printMessage();
+  //oocsi.printMessage();
 }
