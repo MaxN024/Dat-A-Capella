@@ -16,9 +16,12 @@ const int buzzPin = 33;          // the number of the buzzer pin
 int vibrationPin = 32;           // the number of the vibration sensor pin
 int pressurePin = 35;             // the number of the pressure pin 
 int pressurePinOther = 34;       // the number of the pressure pin 
+int ledPin = 25;
 
 int pressureState = 0;
 int pressureStateOther = 0;
+
+int ledState = 0;
 
 int vibrationStateReceive = 0;
 int vibrationStateSend = 0;
@@ -29,6 +32,7 @@ void setup() {
   Serial.begin(115200);
 
   pinMode(buzzPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
   pinMode(pressurePin, INPUT);
   pinMode(vibrationPin, INPUT);  
   pinMode(pressurePinOther, INPUT);  
@@ -57,7 +61,7 @@ void loop() {
   pressureState = analogRead(pressurePin);
   pressureStateOther = analogRead(pressurePinOther);
   vibrationStateSend = digitalRead(vibrationPin);
-  
+ 
 
   // create a new message
   oocsi.newMessage("pencilcaseCommunication2");
@@ -91,21 +95,26 @@ void loop() {
       tone(buzzPin, 1000);
       delay(1000);
   } 
-  else if (pressureState > 4000 /*&& pressureStateOther < 4000 */&& vibrationStateSend == 1){                    
+  else if (pressureState > 4000 && vibrationStateSend == 1){                    
       tone(buzzPin, 500);
       delay(1000);
- 
-  }
+   }
   
-  else if (/*pressureState < 4000 &&*/ pressureStateOther > 4000 && vibrationStateReceive == 1){                      
+  else if ( pressureStateOther > 4000 && vibrationStateReceive == 1){                      
       tone(buzzPin, 500);
-      //led
       delay(1000);
   }
 
   else{
       noTone(buzzPin);
   }
+
+  if (pressureStateOther > 4000){
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+  
   delay(500);
   oocsi.check();
 }
