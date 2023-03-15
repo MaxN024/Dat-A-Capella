@@ -52,7 +52,7 @@ void loop() {
   
   pressureState = analogRead(pressurePin);
   pressureStateOther = analogRead(pressurePinOther);
-  vibrationStateSend = analogRead(vibrationPin);
+  vibrationStateSend = digitalRead(vibrationPin);
   
 
   // create a new message
@@ -75,19 +75,19 @@ void loop() {
   }
   
   // onstate with vibration 
-  else if (pressureState > 4000 && pressureStateOther < 4000 && vibrationStateSend < 100){
+  else if (pressureState > 4000 && pressureStateOther < 4000 && vibrationStateSend == HIGH){
     tone(buzzPin, 100);
   }
-  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateReceive < 100){
+  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateReceive == HIGH){
     tone(buzzPin, 100);
   }
-  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateSend < 100 && vibrationStateReceive < 100){
+  else if (pressureState < 4000 && pressureStateOther > 4000 && vibrationStateSend == HIGH && vibrationStateReceive HIGH){
     tone(buzzPin, 300);
   } 
   else{
       noTone(buzzPin);
   }
-  delay(1000);
+  delay(500);
   oocsi.check();
 }
 
