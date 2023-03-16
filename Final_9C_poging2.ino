@@ -1,14 +1,11 @@
-#include "OOCSI.h"
+#include <OOCSI.h>                             // include OOCSI library
 
-// SSID of your Wifi network, the library currently does not support WPA2 Enterprise networks
-const char* ssid = "iotroam";
-// Password of your Wifi network.
-const char* password = "PencilCase321";  
+// connecting ESP to wifi
+const char* ssid = "iotroam";                  // SSID of your Wifi network
+const char* password = "PencilCase321";        // Password of Wifi network
 
-// name for connecting with OOCSI (unique handle)
-const char* OOCSIName = "pencilcase_receiver";
-// put the adress of your OOCSI server here, can be URL or IP address string
-const char* hostserver = "oocsi.id.tue.nl";
+const char* OOCSIName = "pencilcase_receiver";  // name for connecting with OOCSI 
+const char* hostserver = "oocsi.id.tue.nl";     // the adress of the OOCSI server
 
 OOCSI oocsi = OOCSI();
 
@@ -21,8 +18,6 @@ int ledPin = 25;
 int pressureStateOther_D4 = 0;
 int pressureStateSelf_9C = 0;
 int pressureStateOther_9C = 0;
-
-int ledState = 0;
 
 int vibrationStateReceive = 0;
 int vibrationStateSend = 0;
@@ -73,10 +68,12 @@ void loop() {
   Serial.print("Sensor Value 9C: ");
   Serial.println(vibrationStateSend);
 
-  Serial.print("Sensor Value listening pressure D4: ");
+  Serial.print("Sensor Value listening receiving pressure D4: ");
   Serial.println(pressureStateOther_D4);
-  Serial.print("Sensor Value listening pressure 9C: ");
+  Serial.print("Sensor Value listening sending pressure 9C: ");
   Serial.println(pressureStateOther_9C);
+  Serial.print("Sensor Value pressure self 9C: ");
+  Serial.println(pressureStateSelf_9C); 
   
   // offstate 
   if (pressureStateSelf_9C < 4000 && pressureStateOther_9C < 4000){                                                          
