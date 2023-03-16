@@ -15,26 +15,26 @@ OOCSI oocsi = OOCSI();
 
 const int buzzPin = 33;          // the number of the buzzer pin
 int vibrationPin = 32;           // the number of the vibration sensor pin
-int pressurePin = 35;             // the number of the pressure pin
-int pressurePinOther = 34;       // the number of the pressure pin
+int pressurePinSelf_D4 = 35;     // the number of the pressure pin
+int pressurePinOther_D4 = 34;    // the number of the pressure pin
 int ledPin = 25;
 
-int pressureState = 0;
-int pressureStateOther = 0;
+int pressureStateSelf_D4 = 0;
+int pressureStateOther_D4 = 0;
+int pressureStateOther_9C = 0;
 
 int vibrationStateReceive = 0;
 int vibrationStateSend = 0;
 
-//int volume;
 
 void setup() {
   Serial.begin(115200);
 
   pinMode(buzzPin, OUTPUT);
-  pinMode(pressurePin, INPUT);
-  pinMode(vibrationPin, INPUT);
-  pinMode(pressurePinOther, INPUT);
   pinMode(ledPin, OUTPUT);
+  pinMode(vibrationPin, INPUT);
+  pinMode(pressurePinSelf_D4, INPUT);
+  pinMode(pressurePinOther_D4, INPUT);
 
   // setting up OOCSI. processOOCSI is the name of the fucntion to call when receiving messages, can be a random function name
   // connect wifi and OOCSI to the server
@@ -53,8 +53,8 @@ void setup() {
 
 void loop() {
 
-  pressureState = analogRead(pressurePin);
-  pressureStateOther = analogRead(pressurePinOther);
+  pressureStateSelf_D4 = analogRead(pressurePinSelf_D4);
+  pressureStateOther_D4 = analogRead(pressurePinOther_D4);
   vibrationStateSend = digitalRead(vibrationPin);
 
 
@@ -63,36 +63,35 @@ void loop() {
 
   //Constante loop versturen en ontvangen vibratie waardes
   oocsi.addInt("vibration_device1", vibrationStateSend);
+  oocsi.addInt("listeningPressure_device1", pressureStateOther_D4);
   oocsi.sendMessage();
 
-  // vibrationStateReceive = oocsi.getInt("vibration_device2", 0); is al gedefineerd in processoocsi
-
-  Serial.print("Sensor Value C9: ");
+  Serial.print("Sensor Value 9C: ");
   Serial.println(vibrationStateReceive);
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateSend);
 
-  Serial.print("Sensor Value pressure: ");
-  Serial.println(pressureState);
-  Serial.print("Sensor Value pressure other: ");
-  Serial.println(pressureStateOther);
+  Serial.print("Sensor Value listening pressure 9C: ");
+  Serial.println(pressureStateOther_9C);
+  Serial.print("Sensor Value listening pressure D4: ");
+  Serial.println(pressureStateOther_D4);
 
   // offstate
-  if (pressureState < 4000 && pressureStateOther < 4000) {
+  if (pressureStateSelf_D4 < 4000 && pressureStateOther_D4 < 4000) {
     noTone(buzzPin);
   }
 
   // onstate with vibration
-  else if (pressureState > 4000 && pressureStateOther > 4000 && vibrationStateSend == 1 && vibrationStateReceive == 1) {
+  else if (pressureStateSelf_D4 > 4000 && pressureStateOther_D4 > 4000 && vibrationStateSend == 1 && vibrationStateReceive == 1) {
     tone(buzzPin, 1000);
     delay(1000);
   }
-  else if (pressureState > 4000 /*&& pressureStateOther < 4000*/ && vibrationStateSend == 1) {
+  else if (pressureStateSelf_D4 > 4000 && vibrationStateSend == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
 
-  else if (/*pressureState < 4000 &&*/ pressureStateOther > 4000 && vibrationStateReceive == 1) {
+  else if ( pressureStateOther_D4 > 4000 && vibrationStateReceive == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
@@ -101,7 +100,7 @@ void loop() {
     noTone(buzzPin);
   }
 
-  if (pressureStateOther > 4000) {
+  if (pressureStateOther_9C > 4000) {
     digitalWrite(ledPin, HIGH);
   } else {
     digitalWrite(ledPin, LOW);
@@ -115,7 +114,6 @@ void loop() {
 void processOOCSI() {
 
   vibrationStateReceive = oocsi.getInt("vibration_device2", 0);
+  pressureStateOther_9C = oocsi.getInt("listeningPressure_device2", 0);  
 
-  // use this to print out the raw message that was received
-  oocsi.printMessage();
 }
