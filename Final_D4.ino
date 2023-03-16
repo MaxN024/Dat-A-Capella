@@ -1,15 +1,12 @@
 #include <ESP32Tone.h>
-#include <OOCSI.h>
+#include <OOCSI.h>                              // include OOCSI library
 
-// SSID of your Wifi network, the library currently does not support WPA2 Enterprise networks
-const char* ssid = "iotroam";
-// Password of your Wifi network.
-const char* password = "PencilCase123";
+// connecting ESP to wifi
+const char* ssid = "iotroam";                   // SSID of your Wifi network
+const char* password = "PencilCase123";         // Password of Wifi network
 
-// name for connecting with OOCSI (unique handle)
-const char* OOCSIName = "pencilcase_sender";
-// put the adress of your OOCSI server here, can be URL or IP address string
-const char* hostserver = "oocsi.id.tue.nl";
+const char* OOCSIName = "pencilcase_sender";    // name for connecting with OOCSI 
+const char* hostserver = "oocsi.id.tue.nl";     // the adress of the OOCSI server
 
 OOCSI oocsi = OOCSI();
 
@@ -71,10 +68,12 @@ void loop() {
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateSend);
 
-  Serial.print("Sensor Value listening pressure 9C: ");
+  Serial.print("Sensor Value listening receiving pressure 9C: ");
   Serial.println(pressureStateOther_9C);
-  Serial.print("Sensor Value listening pressure D4: ");
+  Serial.print("Sensor Value listening sending pressure D4: ");
   Serial.println(pressureStateOther_D4);
+  Serial.print("Sensor Value pressure self D4: ");
+  Serial.println(pressureStateSelf_D4); 
 
   // offstate
   if (pressureStateSelf_D4 < 4000 && pressureStateOther_D4 < 4000) {
