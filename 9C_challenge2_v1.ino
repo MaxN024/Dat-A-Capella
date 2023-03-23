@@ -14,9 +14,9 @@ const int buzzPin = 33;                         // the number of the buzzer pin
 int vibrationPin = 32;                          // the number of the vibration sensor pin
 int pressurePinSelf_9C = 35;                    // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_D4 = 34;                   // the number of the pressure pin that controls soundoutput recorded by the other device
-int pressurePinOther_Third;
+int pressurePinOther_Third = 39;
 int ledPin_D4 = 25;                                // the number of the led pin
-int ledPin_Third;
+int ledPin_Third = 27;
 
 // variables
 int pressureStateSelf_9C = 0;                   // pressure state of pressurePinSelf_9C
