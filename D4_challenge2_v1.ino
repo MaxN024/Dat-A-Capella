@@ -14,9 +14,9 @@ const int buzzPin = 33;                         // the number of the buzzer pin
 int vibrationPin = 32;                          // the number of the vibration sensor pin
 int pressurePinSelf_D4 = 35;                    // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_9C = 34;                   // the number of the pressure pin that controls soundoutput recorded by the other device
-int pressurePinOther_Third;
+int pressurePinOther_Third = 39;
 int ledPin_9C = 25;                                // the number of the led pin
-int ledPin_Third;                                // the number of the led pin
+int ledPin_Third = 27;                                // the number of the led pin
 
 // variables
 int pressureStateSelf_D4 = 0;                   // pressure state of pressurePinSelf_D4
@@ -85,7 +85,7 @@ void loop() {
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateSend);
 
-  Serial.print("Sensor Value listening receiving pressure Third: ");
+  Serial.print("Sensor Value listening sending pressure Third: ");
   Serial.println(pressureStateOther_Third);
   Serial.print("Sensor Value listening sending pressure 9C: ");
   Serial.println(pressureStateOther_9C);
@@ -142,6 +142,7 @@ void loop() {
     digitalWrite(ledPin_Third, LOW);
   }
   
+ 
   delay(500);
   oocsi.check();      // oocsi checks for new messages
 }
