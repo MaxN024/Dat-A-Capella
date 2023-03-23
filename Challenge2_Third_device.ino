@@ -2,7 +2,7 @@
 
 // connecting ESP to wifi
 const char* ssid = "iotroam";                         // SSID of your Wifi network
-const char* password = "PencilCase123";               // Password of Wifi network
+const char* password = "OverMeNec";               // Password of Wifi network
 
 const char* OOCSIName = "pencilcase_third_device";    // name for connecting with OOCSI 
 const char* hostserver = "oocsi.id.tue.nl";           // the adress of the OOCSI server
@@ -14,9 +14,9 @@ const int buzzPin = 33;                               // the number of the buzze
 int vibrationPin = 32;                                // the number of the vibration sensor pin
 int pressurePinSelf_Third = 35;                       // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_D4 = 34;                         // the number of the pressure pin that controls soundoutput recorded by the other device
-int pressurePinOther_9C;
+int pressurePinOther_9C = 39;
 int ledPin_9C = 25;                                      // the number of the led pin  
-int ledPin_D4;
+int ledPin_D4 = 27;
 
 // variables
 int pressureStateSelf_Third = 0;                      // pressure state of pressurePinSelf_D4
