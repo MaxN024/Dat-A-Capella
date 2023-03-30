@@ -15,8 +15,8 @@ int vibrationPin = 32;                          // the number of the vibration s
 int pressurePinSelf_9C = 35;                    // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_D4 = 34;                   // the number of the pressure pin that controls soundoutput recorded by the other device
 int pressurePinOther_Third = 39;
-int ledPin_D4 = 25;                                // the number of the led pin
-int ledPin_Third = 27;
+int ledPin_D4 = 25;                                // red, the number of the led pin
+int ledPin_Third = 27;                          // yellow
 
 // variables
 int pressureStateSelf_9C = 0;                   // pressure state of pressurePinSelf_9C
@@ -85,9 +85,9 @@ void loop() {
   Serial.println(vibrationStateSend);
 
   Serial.print("Sensor Value listening receiving pressure D4: ");
-  Serial.println(pressureStateOther_D4);
+  Serial.println(pressureStateListening_D4);
   Serial.print("Sensor Value listening sending pressure Third: ");
-  Serial.println(pressureStateOther_Third);
+  Serial.println(pressureStateListening_Third);
   Serial.print("Sensor Value pressure self 9C: ");
   Serial.println(pressureStateSelf_9C); 
 
@@ -105,20 +105,18 @@ void loop() {
   }
   
   // if the pencil for listening to own vibration is removed and a vibration is detected by own device, buzz
-  else if (pressureStateSelf_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_Third) {
+  else if (pressureStateSelf_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
-  else if (pressureStateSelf_9C > 4000 && pressureStateOther_D4 > 4000 && vibrationStateSend == 1 && vibrationStateReceive_D4) {
+  else if (pressureStateSelf_9C > 4000 && pressureStateOther_D4 > 4000 && vibrationStateSend == 1 && vibrationStateReceive_D4 == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
-  else if (pressureStateOther_Third > 4000 && pressureStateOther_D4 > 4000 && vibrationStateReceive_Third == 1 && vibrationStateReceive_D4) {
+  else if (pressureStateOther_Third > 4000 && pressureStateOther_D4 > 4000 && vibrationStateReceive_Third == 1 && vibrationStateReceive_D4 == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
-
-  
     // if the pencil for listening to other vibration is removed and a vibration is detected by other device, buzz
   else if (( pressureStateOther_D4 > 4000 && vibrationStateReceive_D4 == 1)||( pressureStateOther_Third > 4000 && vibrationStateReceive_Third == 1)||(pressureStateSelf_9C && vibrationStateSend == 1)) {
     tone(buzzPin, 250);
@@ -130,18 +128,22 @@ void loop() {
       noTone(buzzPin);
   }
 
+
   // if the other device is listening to you, show light
   if (pressureStateListening_D4 > 4000) {
     digitalWrite(ledPin_D4, HIGH);
-  } else {
+   // delay(1000);
+  } 
+    if (pressureStateListening_D4 < 4000) {
     digitalWrite(ledPin_D4, LOW);
   }
   if (pressureStateListening_Third > 4000) {
     digitalWrite(ledPin_Third, HIGH);
-  } else {
+    //delay(1000);
+  }
+  if (pressureStateListening_Third < 4000) {
     digitalWrite(ledPin_Third, LOW);
   }
-
   
   delay(500);
   oocsi.check();    // oocsi checks for new messages
