@@ -15,8 +15,8 @@ int vibrationPin = 32;                                // the number of the vibra
 int pressurePinSelf_Third = 35;                       // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_D4 = 34;                         // the number of the pressure pin that controls soundoutput recorded by the other device
 int pressurePinOther_9C = 39;
-int ledPin_9C = 25;                                      // the number of the led pin  
-int ledPin_D4 = 27;
+int ledPin_9C = 25;                            // green, the number of the led pin  
+int ledPin_D4 = 27;                             // red
 
 // variables
 int pressureStateSelf_Third = 0;                      // pressure state of pressurePinSelf_D4
@@ -85,9 +85,9 @@ void loop() {
   Serial.println(vibrationStateSend);
 
   Serial.print("Sensor Value listening receiving pressure D4: ");
-  Serial.println(pressureStateOther_D4);
+  Serial.println(pressureStateListening_D4);
   Serial.print("Sensor Value listening sending pressure 9C: ");
-  Serial.println(pressureStateOther_9C);
+  Serial.println(pressureStateListening_9C);
   Serial.print("Sensor Value pressure self Third: ");
   Serial.println(pressureStateSelf_Third); 
 
@@ -131,17 +131,20 @@ void loop() {
   // if the other device is listening to you, show light
   if (pressureStateListening_D4 > 4000) {
     digitalWrite(ledPin_D4, HIGH);
-  } else {
+    //delay(1000);
+  } 
+  if (pressureStateListening_D4 < 4000) {
     digitalWrite(ledPin_D4, LOW);
   }
   if (pressureStateListening_9C > 4000) {
     digitalWrite(ledPin_9C, HIGH);
-  } else {
+   //delay(1000);
+  } 
+  if (pressureStateListening_9C < 4000) {
     digitalWrite(ledPin_9C, LOW);
   }
 
-  
-
+     
   delay(500);
   oocsi.check();      // oocsi checks for new messages
 }
@@ -150,9 +153,9 @@ void loop() {
 void processOOCSI() {
 
   vibrationStateReceive_9C = oocsi.getInt("vibration_device2", 0);           // incoming vibration data gets called vibrationStateReceive
-  pressureStateListening_9C = oocsi.getInt("device2_listening_to_Third", 0);   // incoming pressure data gets called pressureStateOther_9C
+  pressureStateListening_9C = oocsi.getInt("device2_listening_to_Third",0);   // incoming pressure data gets called pressureStateOther_9C
 
   vibrationStateReceive_D4 = oocsi.getInt("vibration_device1", 0);           // incoming vibration data gets called vibrationStateReceive
-  pressureStateListening_D4 = oocsi.getInt("device1_listening_to_Third", 0);   // incoming pressure data gets called pressureStateOther_D4
+  pressureStateListening_D4 = oocsi.getInt("device1_listening_to_Third",0);   // incoming pressure data gets called pressureStateOther_D4
 
 }
