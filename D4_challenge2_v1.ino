@@ -1,4 +1,4 @@
-#include <OOCSI.h>                              // include OOCSI library
+#include <OOCSI.h>                  // include OOCSI library
 
 // connecting ESP to wifi
 const char* ssid = "iotroam";                   // SSID of your Wifi network
@@ -15,8 +15,8 @@ int vibrationPin = 32;                          // the number of the vibration s
 int pressurePinSelf_D4 = 35;                    // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_9C = 34;                   // the number of the pressure pin that controls soundoutput recorded by the other device
 int pressurePinOther_Third = 39;
-int ledPin_9C = 25;                                // the number of the led pin
-int ledPin_Third = 27;                                // the number of the led pin
+int ledPin_9C = 25;                     // green, the number of the led pin
+int ledPin_Third = 27;                  // yellow, the number of the led pin
 
 // variables
 int pressureStateSelf_D4 = 0;                   // pressure state of pressurePinSelf_D4
@@ -86,9 +86,9 @@ void loop() {
   Serial.println(vibrationStateSend);
 
   Serial.print("Sensor Value listening sending pressure Third: ");
-  Serial.println(pressureStateOther_Third);
+  Serial.println(pressureStateListening_Third);
   Serial.print("Sensor Value listening sending pressure 9C: ");
-  Serial.println(pressureStateOther_9C);
+  Serial.println(pressureStateListening_9C);
   Serial.print("Sensor Value pressure self D4: ");
   Serial.println(pressureStateSelf_D4); 
 
@@ -106,15 +106,15 @@ void loop() {
   }
   
   // if the pencil for listening to own vibration is removed and a vibration is detected by own device, buzz
-  else if (pressureStateSelf_D4 > 4000 && pressureStateOther_9C > 4000 && vibrationStateSend == 1 && vibrationStateReceive_9C) {
+  else if (pressureStateSelf_D4 > 4000 && pressureStateOther_9C > 4000 && vibrationStateSend == 1 && vibrationStateReceive_9C == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
-  else if (pressureStateSelf_D4 > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_Third) {
+  else if (pressureStateSelf_D4 > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
-  else if (pressureStateOther_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateReceive_9C == 1 && vibrationStateReceive_Third) {
+  else if (pressureStateOther_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateReceive_9C == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 500);
     delay(1000);
   }
@@ -133,12 +133,16 @@ void loop() {
   // if the other device is listening to you, show light
   if (pressureStateListening_9C > 4000) {
     digitalWrite(ledPin_9C, HIGH);
-  } else {
+    //delay(1000);
+  } 
+  if (pressureStateListening_9C < 4000){
     digitalWrite(ledPin_9C, LOW);
   }
   if (pressureStateListening_Third > 4000) {
     digitalWrite(ledPin_Third, HIGH);
-  } else {
+    //delay(1000);
+  }
+  if (pressureStateListening_Third < 4000) {
     digitalWrite(ledPin_Third, LOW);
   }
   
