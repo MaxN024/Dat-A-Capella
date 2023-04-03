@@ -71,9 +71,9 @@ void loop() {
   oocsi.newMessage("pencilcaseCommunication3");
 
   // Adding data to message and sending it
-  oocsi.addInt("vibration_device3", vibrationStateSend);
-  oocsi.addInt("device3_listening_to_D4", pressureStateOther_D4);
-  oocsi.addInt("device3_listening_to_9C", pressureStateOther_9C);
+  oocsi.addInt("vib_3", vibrationStateSend);
+  oocsi.addInt("3_listen_D4", pressureStateOther_D4);
+  oocsi.addInt("3_listen_9C", pressureStateOther_9C);
   oocsi.sendMessage();
 
   // print data send to and received by oocsi in serial monitor
@@ -152,10 +152,10 @@ void loop() {
 // function which OOCSI calls when an OOCSI message is received
 void processOOCSI() {
 
-  vibrationStateReceive_9C = oocsi.getInt("vibration_device2", 0);           // incoming vibration data gets called vibrationStateReceive
-  pressureStateListening_9C = oocsi.getInt("device2_listening_to_Third",0);   // incoming pressure data gets called pressureStateOther_9C
+  vibrationStateReceive_9C = oocsi.getInt("vib_9C", 0);           // incoming vibration data gets called vibrationStateReceive
+  pressureStateListening_9C = oocsi.getInt("9C_listen_3",0);   // incoming pressure data gets called pressureStateOther_9C
 
-  vibrationStateReceive_D4 = oocsi.getInt("vibration_device1", 0);           // incoming vibration data gets called vibrationStateReceive
-  pressureStateListening_D4 = oocsi.getInt("device1_listening_to_Third",0);   // incoming pressure data gets called pressureStateOther_D4
+  vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data gets called vibrationStateReceive
+  pressureStateListening_D4 = oocsi.getInt("D4_listen_3",0);   // incoming pressure data gets called pressureStateOther_D4
 
 }
