@@ -85,9 +85,9 @@ void loop() {
   Serial.print("Sensor Value D4: ");
   Serial.println(vibrationStateSend);
 
-  Serial.print("Sensor Value listening sending pressure Third: ");
+  Serial.print("Sensor Value listening receive pressure Third: ");
   Serial.println(pressureStateListening_Third);
-  Serial.print("Sensor Value listening sending pressure 9C: ");
+  Serial.print("Sensor Value listening receive pressure 9C: ");
   Serial.println(pressureStateListening_9C);
   Serial.print("Sensor Value pressure self D4: ");
   Serial.println(pressureStateSelf_D4); 
