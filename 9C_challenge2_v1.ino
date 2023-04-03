@@ -1,8 +1,8 @@
 #include "OOCSI.h"                             // include OOCSI library
 
 // connecting ESP to wifi
-const char* ssid = "iotroam";                  // SSID of your Wifi network
-const char* password = "PencilCase321";        // Password of Wifi network
+const char* ssid = "iotroam";                  // iotroam SSID of your Wifi network
+const char* password = "PencilCase321";        //PencilCase321 Password of Wifi network
 
 const char* OOCSIName = "pencilcase_receiver";  // name for connecting with OOCSI 
 const char* hostserver = "oocsi.id.tue.nl";     // the adress of the OOCSI server
@@ -71,9 +71,9 @@ void loop() {
   oocsi.newMessage("pencilcaseCommunication2");
 
   // Adding data to message and sending it
-  oocsi.addInt("vibration_device2", vibrationStateSend);
-  oocsi.addInt("device2_listening_to_Third", pressureStateOther_Third);
-  oocsi.addInt("device2_listening_to_D4", pressureStateOther_D4);
+  oocsi.addInt("vib_9C", vibrationStateSend);
+  oocsi.addInt("9C_listen_3", pressureStateOther_Third);
+  oocsi.addInt("9C_listen_D4", pressureStateOther_D4);
   oocsi.sendMessage();
 
   // print data send to and received by oocsi in serial monitor
@@ -152,10 +152,10 @@ void loop() {
 // function which OOCSI calls when an OOCSI message is received
 void processOOCSI() {
    
-   vibrationStateReceive_D4 = oocsi.getInt("vibration_device1", 0);           // incoming vibration data gets called vibrationStateReceive
-   pressureStateListening_D4 = oocsi.getInt("device1_listening_to_9C", 0);   // incoming pressure data gets called pressureStateOther_D4
+   vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data gets called vibrationStateReceive
+   pressureStateListening_D4 = oocsi.getInt("D4_listen_9C", 0);   // incoming pressure data gets called pressureStateOther_D4
 
-   vibrationStateReceive_Third = oocsi.getInt("vibration_device3", 0);           // incoming vibration data gets called vibrationStateReceive
-   pressureStateListening_Third = oocsi.getInt("device3_listening_to_9C", 0);   // incoming pressure data gets called pressureStateOther_9C
+   vibrationStateReceive_Third = oocsi.getInt("vib_3", 0);           // incoming vibration data gets called vibrationStateReceive
+   pressureStateListening_Third = oocsi.getInt("3_listen_9C", 0);   // incoming pressure data gets called pressureStateOther_9C
 
 }
