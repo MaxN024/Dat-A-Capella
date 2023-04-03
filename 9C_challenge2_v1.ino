@@ -1,8 +1,8 @@
 #include "OOCSI.h"                             // include OOCSI library
 
 // connecting ESP to wifi
-const char* ssid = "iotroam";                  // iotroam SSID of your Wifi network
-const char* password = "PencilCase321";        //PencilCase321 Password of Wifi network
+const char* ssid = "iotroam";                  // SSID of your Wifi network
+const char* password = "PencilCase321";        // Password of Wifi network
 
 const char* OOCSIName = "pencilcase_receiver";  // name for connecting with OOCSI 
 const char* hostserver = "oocsi.id.tue.nl";     // the adress of the OOCSI server
@@ -13,20 +13,20 @@ OOCSI oocsi = OOCSI();                          // connection to oocsi
 const int buzzPin = 33;                         // the number of the buzzer pin
 int vibrationPin = 32;                          // the number of the vibration sensor pin
 int pressurePinSelf_9C = 35;                    // the number of the pressure pin that controls soundoutput recorded by this device
-int pressurePinOther_D4 = 34;                   // the number of the pressure pin that controls soundoutput recorded by the other device
-int pressurePinOther_Third = 39;
-int ledPin_D4 = 25;                                // red, the number of the led pin
-int ledPin_Third = 27;                          // yellow
+int pressurePinOther_D4 = 34;                   // the number of the pressure pin that controls soundoutput recorded by D4
+int pressurePinOther_Third = 39;                // the number of the pressure pin that controls soundoutput recorded by third device
+int ledPin_D4 = 25;                             // red LED, the number of the led pin representing D4
+int ledPin_Third = 27;                          // yellow LED, the number of the led pin representing third device
 
 // variables
 int pressureStateSelf_9C = 0;                   // pressure state of pressurePinSelf_9C
 int pressureStateOther_D4 = 0;                  // pressure state of pressurePinOther_D4
-int pressureStateOther_Third = 0;                  // pressure state of pressurePinOther_9C
-int pressureStateListening_D4 = 0;                  // pressure state of pressurePinOther_D4
-int pressureStateListening_Third = 0;                  // pressure state of pressurePinOther_9C
+int pressureStateOther_Third = 0;               // pressure state of pressurePinOther_Third
+int pressureStateListening_D4 = 0;              // receiving pressure state of D4
+int pressureStateListening_Third = 0;           // receiving pressure state of 9C
 
-int vibrationStateReceive_D4 = 0;                  // vibration state of vibration data this code receives
-int vibrationStateReceive_Third = 0;
+int vibrationStateReceive_D4 = 0;               // vibration state of vibration data this code receives from D4
+int vibrationStateReceive_Third = 0;            // vibration state of vibration data this code receives from third device
 int vibrationStateSend = 0;                     // vibration state of vibration data this code sends, vibrationPin
 
 
@@ -45,7 +45,7 @@ void setup() {
   // connect wifi and OOCSI to the server
   oocsi.connect(OOCSIName, hostserver, ssid, password, processOOCSI);
 
-  // subscribe to a channel
+  // subscribe to the channels
   Serial.println("subscribing to pencilcaseCommunicationl");
   oocsi.subscribe("pencilcaseCommunication1");
 
@@ -60,7 +60,8 @@ void setup() {
 }
 
 void loop() {
-  
+
+  // connecting sensor data to right variable name
   pressureStateSelf_9C = analogRead(pressurePinSelf_9C);
   pressureStateOther_D4 = analogRead(pressurePinOther_D4);
   pressureStateOther_Third = analogRead(pressurePinOther_Third);
@@ -86,7 +87,7 @@ void loop() {
 
   Serial.print("Sensor Value listening receiving pressure D4: ");
   Serial.println(pressureStateListening_D4);
-  Serial.print("Sensor Value listening sending pressure Third: ");
+  Serial.print("Sensor Value listening receive pressure Third: ");
   Serial.println(pressureStateListening_Third);
   Serial.print("Sensor Value pressure self 9C: ");
   Serial.println(pressureStateSelf_9C); 
@@ -98,13 +99,13 @@ void loop() {
       noTone(buzzPin);
   }
   
-    // if all 3 pencils are out and vibration is detected in both devices, buzz loud
+    // if all 3 pencils are out and vibration is detected in all devices, buzz loud
   else if (pressureStateSelf_9C > 4000 && pressureStateOther_D4 > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_D4 == 1 && vibrationStateReceive_Third == 1){   
       tone(buzzPin, 1000);
       delay(1000);                    // this delay is added so that the buzzer plays for at least 1 second
   }
   
-  // if the pencil for listening to own vibration is removed and a vibration is detected by own device, buzz
+  // if at least two pencils for listening are removed and vibration is detected by both, buzz 
   else if (pressureStateSelf_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 500);
     delay(1000);
@@ -117,8 +118,7 @@ void loop() {
     tone(buzzPin, 500);
     delay(1000);
   }
-    // if the pencil for listening to other vibration is removed and a vibration is detected by other device, buzz
-  else if (( pressureStateOther_D4 > 4000 && vibrationStateReceive_D4 == 1)||( pressureStateOther_Third > 4000 && vibrationStateReceive_Third == 1)||(pressureStateSelf_9C && vibrationStateSend == 1)) {
+  // if at least 1 pencil for listening is removed and a vibration is detected by the pencil, buzz soft  else if (( pressureStateOther_D4 > 4000 && vibrationStateReceive_D4 == 1)||( pressureStateOther_Third > 4000 && vibrationStateReceive_Third == 1)||(pressureStateSelf_9C && vibrationStateSend == 1)) {
     tone(buzzPin, 250);
     delay(1000);
   }
@@ -129,17 +129,18 @@ void loop() {
   }
 
 
-  // if the other device is listening to you, show light
+
+  // if D4 is listening to you, light their representitive LED
   if (pressureStateListening_D4 > 4000) {
     digitalWrite(ledPin_D4, HIGH);
-   // delay(1000);
   } 
     if (pressureStateListening_D4 < 4000) {
     digitalWrite(ledPin_D4, LOW);
   }
+
+  // if third device is listening to you, light their representitive LED
   if (pressureStateListening_Third > 4000) {
     digitalWrite(ledPin_Third, HIGH);
-    //delay(1000);
   }
   if (pressureStateListening_Third < 4000) {
     digitalWrite(ledPin_Third, LOW);
@@ -152,10 +153,10 @@ void loop() {
 // function which OOCSI calls when an OOCSI message is received
 void processOOCSI() {
    
-   vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data gets called vibrationStateReceive
-   pressureStateListening_D4 = oocsi.getInt("D4_listen_9C", 0);   // incoming pressure data gets called pressureStateOther_D4
+   vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data of D4 gets called vibrationStateReceive_D4
+   pressureStateListening_D4 = oocsi.getInt("D4_listen_9C", 0);    // incoming pressure data of D4 gets called pressureStateListening_D4
 
-   vibrationStateReceive_Third = oocsi.getInt("vib_3", 0);           // incoming vibration data gets called vibrationStateReceive
-   pressureStateListening_Third = oocsi.getInt("3_listen_9C", 0);   // incoming pressure data gets called pressureStateOther_9C
+   vibrationStateReceive_Third = oocsi.getInt("vib_3", 0);         // incoming vibration data of third device gets called vibrationStateReceive_Third
+   pressureStateListening_Third = oocsi.getInt("3_listen_9C", 0);  // incoming pressure data of third device gets called pressureStateListening_Third
 
 }
