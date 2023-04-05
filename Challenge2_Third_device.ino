@@ -159,9 +159,9 @@ void loop() {
 void processOOCSI() {
 
   vibrationStateReceive_9C = oocsi.getInt("vib_9C", 0);           // incoming vibration data of 9C gets called vibrationStateReceive_9C
-  pressureStateListening_9C = oocsi.getInt("9C_listen_3",0);      // incoming pressure data of 9C gets called pressureStateOther_9C
+  pressureStateListening_9C = oocsi.getInt("9C_listen_3",4000);      // incoming pressure data of 9C gets called pressureStateOther_9C
 
   vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data of D4 gets called vibrationStateReceive_D4
-  pressureStateListening_D4 = oocsi.getInt("D4_listen_3",0);      // incoming pressure data of D4 gets called pressureStateOther_D4
+  pressureStateListening_D4 = oocsi.getInt("D4_listen_3",4000);      // incoming pressure data of D4 gets called pressureStateOther_D4
 
 }
