@@ -135,7 +135,7 @@ void loop() {
   if (pressureStateListening_D4 > 4000) {
     digitalWrite(ledPin_D4, HIGH);
   } 
-    if (pressureStateListening_D4 < 4000) {
+  if (pressureStateListening_D4 < 4000) {
     digitalWrite(ledPin_D4, LOW);
   }
 
@@ -155,9 +155,9 @@ void loop() {
 void processOOCSI() {
    
    vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data of D4 gets called vibrationStateReceive_D4
-   pressureStateListening_D4 = oocsi.getInt("D4_listen_9C", 0);    // incoming pressure data of D4 gets called pressureStateListening_D4
+   pressureStateListening_D4 = oocsi.getInt("D4_listen_9C", 4000);    // incoming pressure data of D4 gets called pressureStateListening_D4
 
    vibrationStateReceive_Third = oocsi.getInt("vib_3", 0);         // incoming vibration data of third device gets called vibrationStateReceive_Third
-   pressureStateListening_Third = oocsi.getInt("3_listen_9C", 0);  // incoming pressure data of third device gets called pressureStateListening_Third
+   pressureStateListening_Third = oocsi.getInt("3_listen_9C", 4000);  // incoming pressure data of third device gets called pressureStateListening_Third
 
 }
