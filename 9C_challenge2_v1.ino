@@ -1,4 +1,4 @@
-#include "OOCSI.h"                             // include OOCSI library
+#include <OOCSI.h>                            // include OOCSI library
 
 // connecting ESP to wifi
 const char* ssid = "iotroam";                  // SSID of your Wifi network
@@ -118,7 +118,8 @@ void loop() {
     tone(buzzPin, 500);
     delay(1000);
   }
-  // if at least 1 pencil for listening is removed and a vibration is detected by the pencil, buzz soft  else if (( pressureStateOther_D4 > 4000 && vibrationStateReceive_D4 == 1)||( pressureStateOther_Third > 4000 && vibrationStateReceive_Third == 1)||(pressureStateSelf_9C && vibrationStateSend == 1)) {
+  // if at least 1 pencil for listening is removed and a vibration is detected by the pencil, buzz soft  
+  else if (( pressureStateOther_D4 > 4000 && vibrationStateReceive_D4 == 1)||( pressureStateOther_Third > 4000 && vibrationStateReceive_Third == 1)||(pressureStateSelf_9C && vibrationStateSend == 1)) {
     tone(buzzPin, 250);
     delay(1000);
   }
