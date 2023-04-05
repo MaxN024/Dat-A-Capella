@@ -29,6 +29,7 @@ int vibrationStateReceive_9C = 0;               // vibration state of vibration 
 int vibrationStateReceive_Third = 0;            // vibration state of vibration data this code receives from third device
 int vibrationStateSend = 0;                     // vibration state of vibration data this code sends, vibrationPin
 
+int clickWeb = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -52,6 +53,9 @@ void setup() {
 
   Serial.println("subscribing to pencilcaseCommunication3");
   oocsi.subscribe("pencilcaseCommunication3");
+  
+  Serial.println("subscribing to pencilsenderweb");
+  oocsi.subscribe("pencilsenderweb");
   
   // check if we are in the client list
   Serial.print("is ");
@@ -93,7 +97,52 @@ void loop() {
   Serial.print("Sensor Value pressure self D4: ");
   Serial.println(pressureStateSelf_D4); 
 
+  if (clickWeb == 1){
+    tone(buzzPin, 1500);
+    delay(250);
+    noTone(buzzPin);
+    delay(250);
+    tone(buzzPin, 1500);
+    delay(250);
+    noTone(buzzPin);
+    delay(250);
+    tone(buzzPin, 1500);
+    delay(250);
+    noTone(buzzPin);
+    delay(250);
 
+    tone(buzzPin, 1500);
+    delay(750);
+    noTone(buzzPin);
+    delay(250);
+    tone(buzzPin, 1500);
+    delay(750);
+    noTone(buzzPin);
+    delay(250);
+    tone(buzzPin, 1500);
+    delay(750);
+    noTone(buzzPin);
+    delay(250);
+
+    tone(buzzPin, 1500);
+    delay(250);
+    noTone(buzzPin);
+    delay(250);
+    tone(buzzPin, 1500);
+    delay(250);
+    noTone(buzzPin);
+    delay(250);
+    tone(buzzPin, 1500);
+    delay(250);
+    noTone(buzzPin);
+    delay(250);
+    
+    clickWeb=0;
+  }
+ if (clickWeb == 0){
+  noTone(buzzPin);
+ }
+  
   // buzzer control
   // pencils in pencilcase, no buzzer
   if (pressureStateSelf_D4 < 4000 && pressureStateOther_9C < 4000 && pressureStateOther_Third <4000) {
@@ -158,9 +207,10 @@ void loop() {
 void processOOCSI() {
 
   vibrationStateReceive_9C = oocsi.getInt("vib_9C", 0);           // incoming vibration data of 9C gets called vibrationStateReceive_9C
-  pressureStateListening_9C = oocsi.getInt("9C_listen_D4", 4000);    // incoming pressure data of 9C gets called pressureStateListening_9C
+  pressureStateListening_9C = oocsi.getInt("d9C_listen_D4", 4000);    // incoming pressure data of 9C gets called pressureStateListening_9C
 
   vibrationStateReceive_Third = oocsi.getInt("vib_3", 0);         // incoming vibration data of third device gets called vibrationStateReceive_Third
-  pressureStateListening_Third = oocsi.getInt("3_listen_D4", 4000);  // incoming pressure data of third device gets called pressureStateListening_Third
+  pressureStateListening_Third = oocsi.getInt("d3_listen_D4", 4000);  // incoming pressure data of third device gets called pressureStateListening_Third
 
+  clickWeb = oocsi.getInt("send", 0);
 }
