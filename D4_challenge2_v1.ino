@@ -1,3 +1,8 @@
+#include <ESP32Servo.h>
+#include <analogWrite.h>
+#include <ESP32Tone.h>
+#include <ESP32PWM.h>
+
 #include <OOCSI.h>                              // include OOCSI library
 
 // connecting ESP to wifi
@@ -152,27 +157,27 @@ void loop() {
   // if all 3 pencils are out and vibration is detected in all devices, buzz  loud
   else if (pressureStateSelf_D4 > 4000 && pressureStateOther_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_9C == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 1000);
-    delay(1000);                    // this delay is added so that the buzzer plays for at least 1 second
+    delay(500);                    // this delay is added so that the buzzer plays for at least 1 second
   }
   
   // if at least two pencils for listening are removed and vibration is detected by both, buzz 
   else if (pressureStateSelf_D4 > 4000 && pressureStateOther_9C > 4000 && vibrationStateSend == 1 && vibrationStateReceive_9C == 1) {
     tone(buzzPin, 500);
-    delay(1000);
+    delay(500);
   }
   else if (pressureStateSelf_D4 > 4000 && pressureStateOther_Third > 4000 && vibrationStateSend == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 500);
-    delay(1000);
+    delay(500);
   }
   else if (pressureStateOther_9C > 4000 && pressureStateOther_Third > 4000 && vibrationStateReceive_9C == 1 && vibrationStateReceive_Third == 1) {
     tone(buzzPin, 500);
-    delay(1000);
+    delay(500);
   }
  
   // if at least 1 pencil for listening is removed and a vibration is detected by the pencil, buzz soft
   else if (( pressureStateOther_9C > 4000 && vibrationStateReceive_9C == 1)||( pressureStateOther_Third > 4000 && vibrationStateReceive_Third == 1)||(pressureStateSelf_D4 && vibrationStateSend == 1)) {
     tone(buzzPin, 250);
-    delay(1000);
+    delay(500);
   }
   
   // all other cases, no buzz sound
@@ -207,10 +212,10 @@ void loop() {
 void processOOCSI() {
 
   vibrationStateReceive_9C = oocsi.getInt("vib_9C", 0);           // incoming vibration data of 9C gets called vibrationStateReceive_9C
-  pressureStateListening_9C = oocsi.getInt("d9C_listen_D4", 4000);    // incoming pressure data of 9C gets called pressureStateListening_9C
+  pressureStateListening_9C = oocsi.getInt("d9C_listen_D4", pressureStateListening_9C);    // incoming pressure data of 9C gets called pressureStateListening_9C
 
   vibrationStateReceive_Third = oocsi.getInt("vib_3", 0);         // incoming vibration data of third device gets called vibrationStateReceive_Third
-  pressureStateListening_Third = oocsi.getInt("d3_listen_D4", 4000);  // incoming pressure data of third device gets called pressureStateListening_Third
+  pressureStateListening_Third = oocsi.getInt("d3_listen_D4", pressureStateListening_Third);  // incoming pressure data of third device gets called pressureStateListening_Third
 
   clickWeb = oocsi.getInt("send", 0);
 }
