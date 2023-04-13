@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Click Effect</title>
+    <!-- import oocsi -->
+    <script
+      src="https://oocsi.id.tue.nl/assets/js/oocsi-web.min.js"
+      type="text/javascript"
+    ></script>
+  </head>
+  <body>
+    <main>
+      <p id="text">
+        Welcome to the WorkFlowShow web-based product! Each of the colored buttons represents one of the WorkFlowShow 
+        products placed on various workstations in the Atlas building. Select an instrument and click on one of the boxes 
+        to start composing with the workflow data of your peers. Or click the send button to send an SOS to all of the 
+        products at the same time!
+      </p>
+       <p id="text2">
+       */set screen size to 80%/*
+      </p>
+      <div class="sendbutton">
+        <button id="send" style="width: 100%">Send SOS</button>
+      </div>
+      <!-- buttons for each product -->
+      <div class="container-group" style="width: 100%">
+        <button id="A" style="width: 25%">Listen Product A</button>
+        <button id="B" style="width: 25%">Listen Product B</button>
+        <button id="C" style="width: 25%">Listen Product C</button>
+      </div>
+      <!-- background boxes for each button -->
+      <div id="backgroundboxA"></div>
+      <div id="backgroundboxB"></div>
+      <div id="backgroundboxC"></div>
+      <!-- import sounds -->
+      <audio id="Hihat">
+        <source src="Hihat.wav" type="audio/wav" />
+      </audio>
+      <audio id="Clap">
+        <source src="Clap.wav" type="audio/wav" />
+      </audio>
+      <audio id="Clave">
+        <source src="Clave1.wav" type="audio/wav" />
+      </audio>
+      <audio id="Ride">
+        <source src="Ride1.wav" type="audio/wav" />
+      </audio>
+      <audio id="Kick">
+        <source src="Kick1.wav" type="audio/wav" />
+      </audio>
+      <!-- add java -->
+      <script src="main.js"></script>
+      <!-- <script scr="oocsi.js"></script> -->
+      <!-- dropdown menu -->
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">
+          Select Instrument
+        </button>
+        <div id="myDropdown" class="dropdown-content">
+          <button id="drop1">Hihat</button>
+          <button id="drop2">Clap</button>
+          <button id="drop3">Clave</button>
+          <button id="drop4">Ride</button>
+          <button id="drop5">Kick</button>
+        </div>
+      </div>
+      <div class="dropdown2">
+        <button onclick="myFunction2()" class="dropbtn2">
+          Select Instrument
+        </button>
+        <div id="myDropdown2" class="dropdown-content2">
+          <button id="drop6">Hihat</button>
+          <button id="drop7">Clap</button>
+          <button id="drop8">Clave</button>
+          <button id="drop9">Ride</button>
+          <button id="drop10">Kick</button>
+        </div>
+      </div>
+      <div class="dropdown3">
+        <button onclick="myFunction3()" class="dropbtn3">
+          Select Instrument
+        </button>
+        <div id="myDropdown3" class="dropdown-content3">
+          <button id="drop11">Hihat</button>
+          <button id="drop12">Clap</button>
+          <button id="drop13">Clave</button>
+          <button id="drop14">Ride</button>
+          <button id="drop15">Kick</button>
+        </div>
+      </div>
+      <script>
+        document.getElementById("drop1").onclick = function () {
+          HihatFunction();
+        };
+        document.getElementById("drop2").onclick = function () {
+          ClapFunction();
+        };
+        document.getElementById("drop3").onclick = function () {
+          ClaveFunction();
+        };
+        document.getElementById("drop4").onclick = function () {
+          RideFunction();
+        };
+        document.getElementById("drop5").onclick = function () {
+          KickFunction();
+        };
+        document.getElementById("drop6").onclick = function () {
+          HihatFunction2();
+        };
+        document.getElementById("drop7").onclick = function () {
+          ClapFunction2();
+        };
+        document.getElementById("drop8").onclick = function () {
+          ClaveFunction2();
+        };
+        document.getElementById("drop9").onclick = function () {
+          RideFunction2();
+        };
+        document.getElementById("drop10").onclick = function () {
+          KickFunction2();
+        };
+        document.getElementById("drop11").onclick = function () {
+          HihatFunction3();
+        };
+        document.getElementById("drop12").onclick = function () {
+          ClapFunction3();
+        };
+        document.getElementById("drop13").onclick = function () {
+          ClaveFunction3();
+        };
+        document.getElementById("drop14").onclick = function () {
+          RideFunction3();
+        };
+        document.getElementById("drop15").onclick = function () {
+          KickFunction3();
+        };
+      </script>
+    </main>
+    <!-- OOCSI send button and code line -->
+    <div>
+      <code id="dataDisplay"></code>
+    </div>
+  </body>
+</html>
