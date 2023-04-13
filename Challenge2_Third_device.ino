@@ -1,10 +1,15 @@
+#include <ESP32Servo.h>
+#include <analogWrite.h>
+#include <ESP32Tone.h>
+#include <ESP32PWM.h>
+
 #include <OOCSI.h>                                    // include OOCSI library
 
 // connecting ESP to wifi
 const char* ssid = "iotroam";                         // SSID of your Wifi network
 const char* password = "OverMeNec";                   // Password of Wifi network
 
-const char* OOCSIName = "pencilcase_third_device";    // name for connecting with OOCSI 
+const char* OOCSIName = "pencilcase_third_device";    // name for connecting with OOCSI
 const char* hostserver = "oocsi.id.tue.nl";           // the adress of the OOCSI server
 
 OOCSI oocsi = OOCSI();                                // connection to oocsi
@@ -15,8 +20,8 @@ int vibrationPin = 32;                                // the number of the vibra
 int pressurePinSelf_Third = 35;                       // the number of the pressure pin that controls soundoutput recorded by this device
 int pressurePinOther_D4 = 34;                         // the number of the pressure pin that controls soundoutput recorded by D4
 int pressurePinOther_9C = 39;                         // the number of the pressure pin that controls soundoutput recorded by 9C
-int ledPin_9C = 25;                                   // green LED, the number of the led pin representing 9C 
-int ledPin_D4 = 27;                                   // red LED, the number of the led pin representing D4 
+int ledPin_9C = 27;                                   // green LED, the number of the led pin representing 9C
+int ledPin_D4 = 25;                                   // red LED, the number of the led pin representing D4
 
 // variables
 int pressureStateSelf_Third = 0;                      // pressure state of pressurePinSelf_Third
@@ -29,18 +34,19 @@ int vibrationStateReceive_D4 = 0;                     // vibration state of vibr
 int vibrationStateReceive_9C = 0;                     // vibration state of vibration data this code receives from 9C
 int vibrationStateSend = 0;                           // vibration state of vibration data this code sends, vibrationPin
 
+int clickWeb;
 
 void setup() {
   Serial.begin(115200);
 
   // pinmode identification for sensor pins
   pinMode(buzzPin, OUTPUT);
-  pinMode(ledPin_D4, OUTPUT);  
+  pinMode(ledPin_D4, OUTPUT);
   pinMode(ledPin_9C, OUTPUT);
   pinMode(vibrationPin, INPUT);
   pinMode(pressurePinSelf_Third, INPUT);
   pinMode(pressurePinOther_9C, INPUT);
-  pinMode(pressurePinOther_D4, INPUT);  
+  pinMode(pressurePinOther_D4, INPUT);
 
   // connect wifi and OOCSI to the server
   oocsi.connect(OOCSIName, hostserver, ssid, password, processOOCSI);
@@ -48,13 +54,13 @@ void setup() {
   // subscribe to the channels
   Serial.println("subscribing to pencilcaseCommunication1");
   oocsi.subscribe("pencilcaseCommunication1");
-  
+
   Serial.println("subscribing to pencilcaseCommunication2");
   oocsi.subscribe("pencilcaseCommunication2");
 
   Serial.println("subscribing to pencilsenderweb");
   oocsi.subscribe("pencilsenderweb");
-  
+
   // check if we are in the client list
   Serial.print("is ");
   Serial.print(OOCSIName);
@@ -63,7 +69,7 @@ void setup() {
 }
 
 void loop() {
-  
+
   // connecting sensor data to right variable name
   pressureStateSelf_Third = analogRead(pressurePinSelf_Third);
   pressureStateOther_D4 = analogRead(pressurePinOther_D4);
@@ -93,9 +99,9 @@ void loop() {
   Serial.print("Sensor Value listening receive pressure 9C: ");
   Serial.println(pressureStateListening_9C);
   Serial.print("Sensor Value pressure self Third: ");
-  Serial.println(pressureStateSelf_Third); 
+  Serial.println(pressureStateSelf_Third);
 
-  if (clickWeb == 1){
+  if (clickWeb == 1) {
     tone(buzzPin, 1500);
     delay(250);
     noTone(buzzPin);
@@ -134,12 +140,12 @@ void loop() {
     delay(250);
     noTone(buzzPin);
     delay(250);
-    
-    clickWeb=0;
+
+    clickWeb = 0;
   }
- if (clickWeb == 0){
-  noTone(buzzPin);
- }
+  if (clickWeb == 0) {
+    noTone(buzzPin);
+  }
 
   // buzzer control
   // pencils in pencilcase, no buzzer
@@ -150,27 +156,27 @@ void loop() {
   // if all 3 pencils are out and vibration is detected in all devices, buzz loud
   else if (pressureStateSelf_Third > 4000 && pressureStateOther_D4 > 4000 && pressureStateOther_9C > 4000 && vibrationStateSend == 1 && vibrationStateReceive_9C == 1 && vibrationStateReceive_D4 == 1) {
     tone(buzzPin, 1000);
-    delay(1000);                    // this delay is added so that the buzzer plays for at least 1 second
+    delay(500);                    // this delay is added so that the buzzer plays for at least 1 second
   }
 
-// if at least two pencils for listening are removed and vibration is detected by both, buzz 
+  // if at least two pencils for listening are removed and vibration is detected by both, buzz
   else if (pressureStateSelf_Third > 4000 && pressureStateOther_D4 > 4000 && vibrationStateSend == 1 && vibrationStateReceive_D4 == 1) {
-  tone(buzzPin, 500);
-  delay(1000);                    // this delay is added so that the buzzer plays for at least 1 second
+    tone(buzzPin, 500);
+    delay(500);                    // this delay is added so that the buzzer plays for at least 1 second
   }
   else if (pressureStateSelf_Third > 4000 && pressureStateOther_9C > 4000 && vibrationStateSend == 1 && vibrationStateReceive_9C == 1) {
-  tone(buzzPin, 500);
-  delay(1000);                    // this delay is added so that the buzzer plays for at least 1 second
+    tone(buzzPin, 500);
+    delay(500);                    // this delay is added so that the buzzer plays for at least 1 second
   }
   else if (pressureStateOther_9C > 4000 && pressureStateOther_D4 > 4000 && vibrationStateReceive_9C == 1 && vibrationStateReceive_D4 == 1) {
-  tone(buzzPin, 500);
-  delay(1000);                    // this delay is added so that the buzzer plays for at least 1 second
+    tone(buzzPin, 500);
+    delay(500);                    // this delay is added so that the buzzer plays for at least 1 second
   }
-  
+
   // if at least 1 pencil for listening is removed and a vibration is detected by the pencil, buzz soft
-  else if ((pressureStateSelf_Third > 4000 && vibrationStateSend == 1)||(pressureStateOther_9C > 4000 && vibrationStateReceive_9C)||(pressureStateOther_D4 > 4000 && vibrationStateReceive_D4)) {
+  else if ((pressureStateSelf_Third > 4000 && vibrationStateSend == 1) || (pressureStateOther_9C > 4000 && vibrationStateReceive_9C == 1) || (pressureStateOther_D4 > 4000 && vibrationStateReceive_D4 == 1)) {
     tone(buzzPin, 250);
-    delay(1000);
+    delay(500);
   }
 
   // all other cases, no buzz sound
@@ -185,7 +191,7 @@ void loop() {
   if (pressureStateListening_D4 > 4000) {
     digitalWrite(ledPin_D4, HIGH);
     //delay(1000);
-  } 
+  }
   if (pressureStateListening_D4 < 4000) {
     digitalWrite(ledPin_D4, LOW);
   }
@@ -193,12 +199,12 @@ void loop() {
   // if 9C is listening to you, light their representitive LED
   if (pressureStateListening_9C > 4000) {
     digitalWrite(ledPin_9C, HIGH);
-  } 
+  }
   if (pressureStateListening_9C < 4000) {
     digitalWrite(ledPin_9C, LOW);
   }
 
-     
+
   delay(500);
   oocsi.check();      // oocsi checks for new messages
 }
@@ -207,10 +213,10 @@ void loop() {
 void processOOCSI() {
 
   vibrationStateReceive_9C = oocsi.getInt("vib_9C", 0);           // incoming vibration data of 9C gets called vibrationStateReceive_9C
-  pressureStateListening_9C = oocsi.getInt("d9C_listen_3",4000);      // incoming pressure data of 9C gets called pressureStateOther_9C
+  pressureStateListening_9C = oocsi.getInt("d9C_listen_3", pressureStateListening_9C);     // incoming pressure data of 9C gets called pressureStateOther_9C
 
   vibrationStateReceive_D4 = oocsi.getInt("vib_D4", 0);           // incoming vibration data of D4 gets called vibrationStateReceive_D4
-  pressureStateListening_D4 = oocsi.getInt("D4_listen_3",4000);      // incoming pressure data of D4 gets called pressureStateOther_D4
+  pressureStateListening_D4 = oocsi.getInt("D4_listen_3", pressureStateListening_D4);     // incoming pressure data of D4 gets called pressureStateOther_D4
 
   clickWeb = oocsi.getInt("send", 0);
 }
